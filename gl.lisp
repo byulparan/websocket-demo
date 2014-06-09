@@ -1,5 +1,5 @@
 
-(defpackage :gl
+(defpackage #:gl
   (:use #:cl #:js #:ps)
   (:export #:init-shader))
 

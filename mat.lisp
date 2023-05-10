@@ -11,37 +11,37 @@
 (in-package :mat)
 
 (define-ps-macro create-mat4 ()
-  `(chain mat4 (create)))
+  `(chain gl-matrix mat4 (create)))
 
 (define-ps-macro create-mat3 ()
-  `(chain mat3 (create)))
+  `(chain gl-matrix mat3 (create)))
 
 (define-ps-macro set-mat4 (src-matrix dst-matrix)
-  `(chain mat4 (set ,src-matrix ,dst-matrix )))
+  `(chain gl-matrix mat4 (set ,src-matrix ,dst-matrix )))
 
 (define-ps-macro identity (dest)
-  `(chain mat4 (identity ,dest)))
+  `(chain gl-matrix mat4 (identity ,dest)))
 
 (define-ps-macro perspective (fovy aspect near far dest)
-  `(chain mat4 (perspective ,fovy ,aspect ,near ,far ,dest)))
+  `(chain gl-matrix mat4 (perspective ,fovy ,aspect ,near ,far ,dest)))
 
 (define-ps-macro ortho (left right bottom top near far dest)
-  `(chain mat4 (ortho ,left ,right ,bottom ,top ,near ,far ,dest)))
+  `(chain gl-matrix mat4 (ortho ,left ,right ,bottom ,top ,near ,far ,dest)))
 
 (define-ps-macro rotate (dest angle axis)
-  `(chain mat4 (rotate ,dest ,angle ,axis )))
+  `(chain gl-matrix mat4 (rotate ,dest ,dest ,angle ,axis )))
 
 (define-ps-macro translate (dest vec)
-  `(chain mat4 (translate ,dest ,vec)))
+  `(chain gl-matrix mat4 (translate ,dest ,dest ,vec)))
 
 (define-ps-macro scale (dest vec)
-  `(chain mat4 (scale ,dest ,vec)))
+  `(chain gl-matrix mat4 (scale ,dest ,vec)))
 
 (define-ps-macro to-inverse-mat3 (src-matrix dst-matrix)
-  `(chain mat4 (to-inverse-mat3 ,src-matrix ,dst-matrix)))
+  `(chain gl-matrix mat4 (to-inverse-mat3 ,src-matrix ,dst-matrix)))
 
 (define-ps-macro transpose (matrix)
-  `(chain mat3 (transpose ,matrix)))
+  `(chain gl-matrix mat3 (transpose ,matrix)))
 
 
 

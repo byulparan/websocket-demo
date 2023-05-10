@@ -43,7 +43,7 @@
 
 (in-ws-repl
   (let ((script (create-element "script")))
-    (setf (-> script src) "https://glmatrix.googlecode.com/files/glMatrix-0.9.5.min.js")
+    (setf (-> script src) "https://cdnjs.cloudflare.com/ajax/libs/gl-matrix/3.4.2/gl-matrix.js")
     (-> document body (append-child script))))
 
 
@@ -66,6 +66,7 @@ gl_FragColor = uColor;
 
 
 ;;; setup for webgl
+;; This fails on missing mat4
 (in-ws-repl
   (gl:with-gl-canvas (canvas "gl-canvas")
     (setf shader-program (gl:init-shader (lisp *vertex-shader*)
@@ -112,7 +113,7 @@ gl_FragColor = uColor;
       (gl:clear-color bg-color bg-color bg-color 1.0))
     (gl:clear :color-buffer-bit :depth-buffer-bit)
     (gl:viewport 0 0 (@ canvas width) (@ canvas height))
-    (mat:perspective 45 (/ (@ canvas width) (@ canvas height)) .1 100. p-matrix)
+    (mat:perspective p-matrix 45 (/ (@ canvas width) (@ canvas height)) .1 100.)
     (mat:identity mv-matrix)
     (mat:translate mv-matrix (list -10. 0 -20.))
     (gl:bind-buffer :array-buffer vertex-position-buffer)
@@ -121,7 +122,7 @@ gl_FragColor = uColor;
     (gl:vertex-attrib-pointer (@ shader-program vertex-color-attrib) 3 :float f 0 0)
     (gl:bind-buffer :element-array-buffer vertex-indicies-buffer)
     (incf *degree* 1)
-    (dotimes (i 20)
+    (dotimes (i 30)
       (mat:rotate mv-matrix (deg-to-rad *degree*) (list 1 0 1))
       (mat:translate mv-matrix (list 1 0 0))
       (mat:set-matrix-uniforms)

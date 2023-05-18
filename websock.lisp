@@ -85,12 +85,32 @@
   (:report (lambda (condition stream)
 	     (format stream "~a" (error-report condition)))))
 
+
+(defun call-in-ws-repl (thunk)
+  (declare (optimize (debug 3) (safety 3)))
+  (let* ((object (make-instance 'message-box :semaphore (bt-sem:make-semaphore)))
+	 (id (assign-id-map-id *id-map* object)))
+    (ws:write-to-client-text
+     *client*
+     (ps (setf x
+               (create :id (lisp id) :task (lisp thunk)))))
+    (bt-sem:wait-on-semaphore (semaphore object))
+    (if (errorp object)
+        (error 'websocket-repl-error :error-report (result object))
+	(result object))))
+
+
 (defmacro in-ws-repl (&body body)
+  `(call-in-ws-repl (ps ,@body)))
+
+
+(defmacro in-ws-repl-orig (&body body)
   `(let* ((object (make-instance 'message-box :semaphore (bt-sem:make-semaphore)))
 	  (id (assign-id-map-id *id-map* object)))
      (ws:write-to-client-text
       *client*
-      (ps (create :id (lisp id) :task (lisp (ps ,@body)))))
+      (ps (setf x
+                (create :id (lisp id) :task (lisp (ps ,@body))))))
      (bt-sem:wait-on-semaphore (semaphore object))
      (if (errorp object) (error 'websocket-repl-error :error-report (result object))
 	 (result object))))
